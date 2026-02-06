@@ -239,7 +239,6 @@ class EmployeeController extends ApiController
     public function destroy(Employee $employee): JsonResponse
     {
         $employee->delete();
-
         return $this->successResponse(null, 'Employee deleted successfully');
     }
 

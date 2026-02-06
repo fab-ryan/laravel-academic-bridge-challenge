@@ -19,14 +19,10 @@ class Employee extends Model
         'phone_number',
     ];
 
-    // public function attendances(): HasMany
-    // {
-    //     return $this->hasMany(Attendance::class);
-    // }
+
 
     public function routeNotificationForMail(): string
     {
         return $this->email;
     }
-
 }
