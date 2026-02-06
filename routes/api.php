@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EmployeeController;
-use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\ReportController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,7 +67,6 @@ Route::prefix('v1')->group(function () {
         });
     });
 });
-
 
 /*
 |--------------------------------------------------------------------------

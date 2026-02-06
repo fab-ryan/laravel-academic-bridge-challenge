@@ -49,7 +49,7 @@ class AttendanceRecordedNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject("Attendance {$action} Recorded")
             ->greeting("Hello {$notifiable->names}!")
-            ->line("Your attendance has been recorded.")
+            ->line('Your attendance has been recorded.')
             ->line("**{$action} Time:** {$time}")
             ->line("**Date:** {$this->attendance->date->format('Y-m-d')}")
             ->line('Thank you for using our attendance system!');

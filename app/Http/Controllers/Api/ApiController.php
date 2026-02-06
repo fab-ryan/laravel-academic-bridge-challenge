@@ -44,22 +44,29 @@ abstract class ApiController extends Controller
      * HTTP Status Code Constants
      */
     protected const HTTP_OK = 200;
+
     protected const HTTP_CREATED = 201;
+
     protected const HTTP_NO_CONTENT = 204;
+
     protected const HTTP_BAD_REQUEST = 400;
+
     protected const HTTP_UNAUTHORIZED = 401;
+
     protected const HTTP_FORBIDDEN = 403;
+
     protected const HTTP_NOT_FOUND = 404;
+
     protected const HTTP_UNPROCESSABLE_ENTITY = 422;
+
     protected const HTTP_INTERNAL_SERVER_ERROR = 500;
 
     /**
      * Return a success JSON response.
      *
-     * @param mixed $data The response data
-     * @param string $message The success message
-     * @param int $statusCode The HTTP status code
-     * @return JsonResponse
+     * @param  mixed  $data  The response data
+     * @param  string  $message  The success message
+     * @param  int  $statusCode  The HTTP status code
      */
     protected function successResponse(
         mixed $data = null,
@@ -77,10 +84,9 @@ abstract class ApiController extends Controller
     /**
      * Return an error JSON response.
      *
-     * @param string $message The error message
-     * @param int $statusCode The HTTP status code
-     * @param array<string, mixed> $errors Additional error details
-     * @return JsonResponse
+     * @param  string  $message  The error message
+     * @param  int  $statusCode  The HTTP status code
+     * @param  array<string, mixed>  $errors  Additional error details
      */
     protected function errorResponse(
         string $message = 'An error occurred.',
@@ -93,7 +99,7 @@ abstract class ApiController extends Controller
             'timestamp' => now()->toIso8601String(),
         ];
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             $response['errors'] = $errors;
         }
 
@@ -103,9 +109,8 @@ abstract class ApiController extends Controller
     /**
      * Return a created resource response.
      *
-     * @param mixed $data The created resource data
-     * @param string $message The success message
-     * @return JsonResponse
+     * @param  mixed  $data  The created resource data
+     * @param  string  $message  The success message
      */
     protected function createdResponse(
         mixed $data,
@@ -116,8 +121,6 @@ abstract class ApiController extends Controller
 
     /**
      * Return a no content response.
-     *
-     * @return JsonResponse
      */
     protected function noContentResponse(): JsonResponse
     {

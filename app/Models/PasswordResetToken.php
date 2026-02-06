@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class PasswordResetToken extends Model
 {
     protected $primaryKey = 'email';
+
     public $incrementing = false;
+
     protected $keyType = 'string';
+
     public $timestamps = false;
 
     protected $fillable = [

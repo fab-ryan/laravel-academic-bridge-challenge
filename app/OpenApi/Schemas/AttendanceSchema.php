@@ -4,8 +4,6 @@ namespace App\OpenApi\Schemas;
 
 use OpenApi\Attributes as OA;
 
-use function Laravel\Prompts\form;
-
 #[OA\Schema(
     schema: 'Attendance',
     type: 'object',

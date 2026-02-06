@@ -243,6 +243,7 @@ class EmployeeController extends ApiController
     public function destroy(Employee $employee): JsonResponse
     {
         $employee->delete();
+
         return $this->successResponse(null, 'Employee deleted successfully');
     }
 
@@ -253,13 +254,15 @@ class EmployeeController extends ApiController
         if ($latestEmployee) {
             $latestIdentifier = $latestEmployee->employee_identifier;
             if (preg_match('/EMP(\d{3})/', $latestIdentifier, $matches)) {
-                $number = (int)$matches[1] + 1;
-                $employeeIdentifier = 'EMP' . str_pad($number, 3, '0', STR_PAD_LEFT);
+                $number = (int) $matches[1] + 1;
+                $employeeIdentifier = 'EMP'.str_pad($number, 3, '0', STR_PAD_LEFT);
+
                 return $employeeIdentifier;
             }
         } else {
             return $employeeIdentifier;
         }
+
         return $employeeIdentifier;
     }
 }

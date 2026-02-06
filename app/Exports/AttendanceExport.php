@@ -81,7 +81,7 @@ class AttendanceExport implements FromCollection, WithHeadings, WithMapping, Wit
 
     public function title(): string
     {
-        return 'Attendance Report' . ($this->date ? " - {$this->date}" : '') .
+        return 'Attendance Report'.($this->date ? " - {$this->date}" : '').
             ($this->fromDate && $this->toDate ? " ({$this->fromDate} to {$this->toDate})" : '');
     }
 }

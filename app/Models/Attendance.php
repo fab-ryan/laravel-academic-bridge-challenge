@@ -70,11 +70,12 @@ class Attendance extends Model
      */
     public function getHoursWorkedAttribute(): ?string
     {
-        if (!$this->departure_time || !$this->arrival_time) {
+        if (! $this->departure_time || ! $this->arrival_time) {
             return null;
         }
 
         $diff = $this->departure_time->diff($this->arrival_time);
+
         return $diff->format('%H:%I:%S');
     }
 }
