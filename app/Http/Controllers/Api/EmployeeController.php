@@ -11,7 +11,7 @@ use OpenApi\Attributes as OA;
 class EmployeeController extends ApiController
 {
     #[OA\Get(
-        path: '/employees',
+        path: '/v1/employees',
         summary: 'List all employees',
         security: [['bearerAuth' => []]],
         tags: ['Employees'],
@@ -79,7 +79,7 @@ class EmployeeController extends ApiController
     }
 
     #[OA\Post(
-        path: '/employees',
+        path: '/v1/employees',
         summary: 'Create a new employee',
         security: [['bearerAuth' => []]],
         tags: ['Employees'],
@@ -117,14 +117,18 @@ class EmployeeController extends ApiController
             $data['employee_identifier'] = $this->generateUniqueEmployeeIdentifier();
             $employee = Employee::create($data);
 
-            return $this->successResponse($employee, 'Employee created successfully', 201);
+            return $this->createdResponse($employee, 'Employee created successfully');
         } catch (\Exception $e) {
-            return $this->errorResponse('Failed to create employee', 500, ['error' => $e->getMessage()]);
+            return $this->errorResponse(
+                'Failed to create employee',
+                self::HTTP_INTERNAL_SERVER_ERROR,
+                ['error' => $e->getMessage()]
+            );
         }
     }
 
     #[OA\Get(
-        path: '/employees/{id}',
+        path: '/v1/employees/{id}',
         summary: 'Get a specific employee',
         security: [['bearerAuth' => []]],
         tags: ['Employees'],
@@ -159,7 +163,7 @@ class EmployeeController extends ApiController
     }
 
     #[OA\Put(
-        path: '/employees/{id}',
+        path: '/v1/employees/{id}',
         summary: 'Update an employee',
         security: [['bearerAuth' => []]],
         tags: ['Employees'],
@@ -208,7 +212,7 @@ class EmployeeController extends ApiController
     }
 
     #[OA\Delete(
-        path: '/employees/{id}',
+        path: '/v1/employees/{id}',
         summary: 'Delete an employee',
         security: [['bearerAuth' => []]],
         tags: ['Employees'],

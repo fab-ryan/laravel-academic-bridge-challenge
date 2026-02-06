@@ -23,7 +23,7 @@ class AuthController extends ApiController
 {
 
     #[OA\Post(
-        path: '/register',
+        path: '/v1/auth/register',
         summary: 'Register a new user',
         tags: ['Authentication'],
         requestBody: new OA\RequestBody(
@@ -70,14 +70,14 @@ class AuthController extends ApiController
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return $this->successResponse([
+        return $this->createdResponse([
             'user' => $user,
             'token' => $token,
-        ], 'User registered successfully', 201);
+        ], 'User registered successfully');
     }
 
     #[OA\Post(
-        path: '/login',
+        path: '/v1/auth/login',
         summary: 'Login a user',
         tags: ['Authentication'],
         requestBody: new OA\RequestBody(
@@ -117,7 +117,7 @@ class AuthController extends ApiController
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return $this->errorResponse('Invalid credentials', 401);
+            return $this->errorResponse('Invalid credentials', self::HTTP_UNAUTHORIZED);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -131,7 +131,7 @@ class AuthController extends ApiController
 
 
     #[OA\Post(
-        path: '/logout',
+        path: '/v1/auth/logout',
         summary: 'Logout the authenticated user',
         security: [['bearerAuth' => []]],
         tags: ['Authentication'],
@@ -157,7 +157,7 @@ class AuthController extends ApiController
     }
 
     #[OA\Post(
-        path: '/forgot-password',
+        path: '/v1/auth/forgot-password',
         summary: 'Send password reset link',
         tags: ['Authentication'],
         requestBody: new OA\RequestBody(
@@ -190,7 +190,7 @@ class AuthController extends ApiController
             $user = User::where('email', $request->email)->first();
 
             if (!$user) {
-                return $this->errorResponse('User not found', 404);
+                return $this->errorResponse('User not found', self::HTTP_NOT_FOUND);
             }
 
             $token = Str::random(64);
@@ -204,13 +204,16 @@ class AuthController extends ApiController
 
             return $this->successResponse(null, 'Password reset link sent to your email');
         } catch (\Exception $e) {
-            $message = $e->getMessage();
-            return $this->errorResponse($message . 'Failed to send password reset link. Please try again later.', 500);
+            report($e); // Log the exception
+            return $this->errorResponse(
+                'Failed to send password reset link. Please try again later.',
+                self::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 
     #[OA\Post(
-        path: '/reset-password',
+        path: '/v1/auth/reset-password',
         summary: 'Reset password with token',
         tags: ['Authentication'],
         requestBody: new OA\RequestBody(
@@ -244,12 +247,14 @@ class AuthController extends ApiController
         $resetRecord = PasswordResetToken::where('email', $request->email)->first();
 
         if (!$resetRecord || !Hash::check($request->token, $resetRecord->token)) {
-            return $this->errorResponse('Invalid or expired token', 400);
+            return $this->errorResponse('Invalid or expired token', self::HTTP_BAD_REQUEST);
         }
 
-        if ($resetRecord->created_at->addMinutes(60)->isPast()) {
+        // Token expires after 60 minutes
+        $tokenExpirationMinutes = 60;
+        if ($resetRecord->created_at->addMinutes($tokenExpirationMinutes)->isPast()) {
             $resetRecord->delete();
-            return $this->errorResponse('Token has expired', 400);
+            return $this->errorResponse('Token has expired', self::HTTP_BAD_REQUEST);
         }
 
         $user = User::where('email', $request->email)->first();
@@ -261,7 +266,7 @@ class AuthController extends ApiController
     }
 
     #[OA\Get(
-        path: '/user',
+        path: '/v1/auth/user',
         summary: 'Get authenticated user',
         security: [['bearerAuth' => []]],
         tags: ['Authentication'],

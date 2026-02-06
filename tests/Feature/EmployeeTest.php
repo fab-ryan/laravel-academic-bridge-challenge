@@ -22,7 +22,7 @@ class EmployeeTest extends TestCase
     {
         Employee::factory()->count(5)->create();
 
-        $response = $this->getJson('/api/employees');
+        $response = $this->getJson('/api/v1/employees');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
@@ -38,9 +38,9 @@ class EmployeeTest extends TestCase
 
     public function test_can_create_employee(): void
     {
-        $response = $this->postJson('/api/employees', [
+        $response = $this->postJson('/api/v1/employees', [
             'names' => 'John Doe',
-            'email' => 'john@example.com',
+            'email' => 'john@gmail.com',
             'phone_number' => '+250788123456',
         ]);
 
@@ -51,7 +51,7 @@ class EmployeeTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('employees', [
-            'email' => 'john@example.com',
+            'email' => 'john@gmail.com',
         ]);
     }
 
@@ -59,7 +59,7 @@ class EmployeeTest extends TestCase
     {
         $employee = Employee::factory()->create();
 
-        $response = $this->getJson("/api/employees/{$employee->id}");
+        $response = $this->getJson("/api/v1/employees/{$employee->id}");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -75,7 +75,7 @@ class EmployeeTest extends TestCase
     {
         $employee = Employee::factory()->create();
 
-        $response = $this->putJson("/api/employees/{$employee->id}", [
+        $response = $this->putJson("/api/v1/employees/{$employee->id}", [
             'names' => 'Updated Name',
         ]);
 
@@ -95,7 +95,7 @@ class EmployeeTest extends TestCase
     {
         $employee = Employee::factory()->create();
 
-        $response = $this->deleteJson("/api/employees/{$employee->id}");
+        $response = $this->deleteJson("/api/v1/employees/{$employee->id}");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -113,7 +113,7 @@ class EmployeeTest extends TestCase
         Employee::factory()->create(['names' => 'John Doe']);
         Employee::factory()->create(['names' => 'Jane Smith']);
 
-        $response = $this->getJson('/api/employees?search=John');
+        $response = $this->getJson('/api/v1/employees?search=John');
 
         $response->assertStatus(200);
         $this->assertEquals(1, count($response->json('data.data')));
@@ -121,11 +121,11 @@ class EmployeeTest extends TestCase
 
     public function test_cannot_create_employee_with_duplicate_email(): void
     {
-        Employee::factory()->create(['email' => 'existing@example.com']);
+        Employee::factory()->create(['email' => 'existing@gmail.com']);
 
-        $response = $this->postJson('/api/employees', [
+        $response = $this->postJson('/api/v1/employees', [
             'names' => 'New Employee',
-            'email' => 'existing@example.com',
+            'email' => 'existing@gmail.com',
             'phone_number' => '+250788123456',
         ]);
 

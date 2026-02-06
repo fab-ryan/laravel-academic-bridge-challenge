@@ -13,11 +13,11 @@ class AuthenticationTest extends TestCase
 
     public function test_user_can_register(): void
     {
-        $response = $this->postJson('/api/register', [
+        $response = $this->postJson('/api/v1/auth/register', [
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+            'email' => 'test@gmail.com',
+            'password' => 'Password123@',
+            'password_confirmation' => 'Password123@',
         ]);
 
         $response->assertStatus(201)
@@ -31,20 +31,20 @@ class AuthenticationTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('users', [
-            'email' => 'test@example.com',
+            'email' => 'test@gmail.com',
         ]);
     }
 
     public function test_user_can_login(): void
     {
         $user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('password123'),
+            'email' => 'test@gmail.com',
+            'password' => bcrypt('Password123'),
         ]);
 
-        $response = $this->postJson('/api/login', [
-            'email' => 'test@example.com',
-            'password' => 'password123',
+        $response = $this->postJson('/api/v1/auth/login', [
+            'email' => 'test@gmail.com',
+            'password' => 'Password123',
         ]);
 
         $response->assertStatus(200)
@@ -61,12 +61,12 @@ class AuthenticationTest extends TestCase
     public function test_user_cannot_login_with_invalid_credentials(): void
     {
         $user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('password123'),
+            'email' => 'test@gmail.com',
+            'password' => bcrypt('Password123'),
         ]);
 
-        $response = $this->postJson('/api/login', [
-            'email' => 'test@example.com',
+        $response = $this->postJson('/api/v1/auth/login', [
+            'email' => 'test@gmail.com',
             'password' => 'wrongpassword',
         ]);
 
@@ -82,7 +82,7 @@ class AuthenticationTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->postJson('/api/logout');
+        $response = $this->postJson('/api/v1/auth/logout');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -96,7 +96,7 @@ class AuthenticationTest extends TestCase
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/user');
+        $response = $this->getJson('/api/v1/auth/user');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -110,7 +110,7 @@ class AuthenticationTest extends TestCase
 
     public function test_unauthenticated_user_cannot_access_protected_routes(): void
     {
-        $response = $this->getJson('/api/user');
+        $response = $this->getJson('/api/v1/auth/user');
 
         $response->assertStatus(401);
     }

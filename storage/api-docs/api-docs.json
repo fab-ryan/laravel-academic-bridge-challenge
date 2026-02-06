@@ -2,10 +2,14 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Academic Bridge Challenge API",
-        "description": "API documentation for the Academic Bridge Challenge application.",
+        "description": "RESTful API for Employee Attendance Management System. This API provides endpoints for user authentication, employee management, attendance tracking, and report generation.",
         "contact": {
             "name": "API Support",
             "email": "support@academicbridge.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
         },
         "version": "1.0.0"
     },
@@ -13,16 +17,20 @@
         {
             "url": "http://localhost:8000/api",
             "description": "Local Development Server"
+        },
+        {
+            "url": "http://localhost:8000/api/v1",
+            "description": "Local Development Server (Versioned)"
         }
     ],
     "paths": {
-        "/attendances": {
+        "/v1/attendances": {
             "get": {
                 "tags": [
                     "Attendance"
                 ],
                 "summary": "List all attendance records",
-                "operationId": "3a3cfede92caa0d187c4baf5fa8a2d13",
+                "operationId": "f2234780e3ee7cc596a4ae5c51115f19",
                 "parameters": [
                     {
                         "name": "employee_id",
@@ -130,13 +138,13 @@
                 ]
             }
         },
-        "/attendances/check-in": {
+        "/v1/attendances/check-in": {
             "post": {
                 "tags": [
                     "Attendance"
                 ],
                 "summary": "Record employee arrival (check-in)",
-                "operationId": "f5b70b36cd08f5f1abdba30032194e56",
+                "operationId": "804141431d1aa403fa6b46e393977f66",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -198,13 +206,13 @@
                 ]
             }
         },
-        "/attendances/check-out": {
+        "/v1/attendances/check-out": {
             "post": {
                 "tags": [
                     "Attendance"
                 ],
                 "summary": "Record employee departure (check-out)",
-                "operationId": "1a7c4a3e1b6ebb392478fd94c50f1821",
+                "operationId": "5b381c184c8beda551a328c86255e891",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -266,13 +274,13 @@
                 ]
             }
         },
-        "/attendances/{id}": {
+        "/v1/attendances/{id}": {
             "get": {
                 "tags": [
                     "Attendance"
                 ],
                 "summary": "Get a specific attendance record",
-                "operationId": "fde5163622ea3b84e8d0682db28c50f2",
+                "operationId": "d7e567b4a914e224b290250992364b59",
                 "parameters": [
                     {
                         "name": "id",
@@ -280,7 +288,9 @@
                         "description": "Attendance ID",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "550e8400-e29b-41d4-a716-446655440000"
                         }
                     }
                 ],
@@ -322,13 +332,13 @@
                 ]
             }
         },
-        "/attendances/employee/{employee}/today": {
+        "/v1/attendances/employee/{employee}/today": {
             "get": {
                 "tags": [
                     "Attendance"
                 ],
                 "summary": "Get today's attendance for an employee",
-                "operationId": "abd3d87dd3660db149ee62a23ae96ddb",
+                "operationId": "249b19d5571c9fe2bbecec67f17b2046",
                 "parameters": [
                     {
                         "name": "employee",
@@ -385,13 +395,13 @@
                 ]
             }
         },
-        "/register": {
+        "/v1/auth/register": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Register a new user",
-                "operationId": "5d4fa5d5607ed675ba93907e1fc94534",
+                "operationId": "0f7820aec3266d94b412543a433ca21e",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -468,13 +478,13 @@
                 }
             }
         },
-        "/login": {
+        "/v1/auth/login": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Login a user",
-                "operationId": "67d6d0fdd54fba132e1b6f55ca254183",
+                "operationId": "da7de2dd1215d891341d8a66e79d5e55",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -540,13 +550,13 @@
                 }
             }
         },
-        "/logout": {
+        "/v1/auth/logout": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Logout the authenticated user",
-                "operationId": "28d48c13fca984400ac8de99f54ee13a",
+                "operationId": "fcb876bd799cd2c35228d4846ad93679",
                 "responses": {
                     "200": {
                         "description": "Logged out successfully",
@@ -579,13 +589,13 @@
                 ]
             }
         },
-        "/forgot-password": {
+        "/v1/auth/forgot-password": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Send password reset link",
-                "operationId": "f46fe87b31c0dadd30642d353886e6f1",
+                "operationId": "051e5103bb176d437d394311b09553d7",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -633,13 +643,13 @@
                 }
             }
         },
-        "/reset-password": {
+        "/v1/auth/reset-password": {
             "post": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Reset password with token",
-                "operationId": "f93180f97c46f79e028b188d8763b2e1",
+                "operationId": "f17008cd25d991f547ff5a0fd0215d9d",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -704,13 +714,13 @@
                 }
             }
         },
-        "/user": {
+        "/v1/auth/user": {
             "get": {
                 "tags": [
                     "Authentication"
                 ],
                 "summary": "Get authenticated user",
-                "operationId": "2baab1eeb5fd49516237a38da22e7a07",
+                "operationId": "c0104061137d1f02a653a1ce0c7f4c31",
                 "responses": {
                     "200": {
                         "description": "User data retrieved successfully",
@@ -746,13 +756,13 @@
                 ]
             }
         },
-        "/employees": {
+        "/v1/employees": {
             "get": {
                 "tags": [
                     "Employees"
                 ],
                 "summary": "List all employees",
-                "operationId": "9aeb15c3a8c5b0b8b9e0931d1673e787",
+                "operationId": "20334c1900f89400a561d8b7796b7b58",
                 "parameters": [
                     {
                         "name": "search",
@@ -833,7 +843,7 @@
                     "Employees"
                 ],
                 "summary": "Create a new employee",
-                "operationId": "2475af536398d342aca2fd7f60f9af3a",
+                "operationId": "674415a0b9411ec924cacc211bdb4357",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -903,13 +913,13 @@
                 ]
             }
         },
-        "/employees/{id}": {
+        "/v1/employees/{id}": {
             "get": {
                 "tags": [
                     "Employees"
                 ],
                 "summary": "Get a specific employee",
-                "operationId": "41cfd4a7b54d2f35c31ad2afd9d37f3f",
+                "operationId": "8afb03c21dcf6c028a4ba1503530ba43",
                 "parameters": [
                     {
                         "name": "id",
@@ -964,7 +974,7 @@
                     "Employees"
                 ],
                 "summary": "Update an employee",
-                "operationId": "f1e833660cfbccbfbdef00c84e24c5cb",
+                "operationId": "96bae672b778be1f6398e4c3b7a90639",
                 "parameters": [
                     {
                         "name": "id",
@@ -1051,7 +1061,7 @@
                     "Employees"
                 ],
                 "summary": "Delete an employee",
-                "operationId": "12f385259154107ce23e13cf62d2c158",
+                "operationId": "4976e9eda30369bcd80e094c94908542",
                 "parameters": [
                     {
                         "name": "id",
@@ -1087,6 +1097,130 @@
                     },
                     "404": {
                         "description": "Employee not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/reports/attendance/pdf": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Generate attendance report in PDF format",
+                "operationId": "0ab0c018dcf3bf000528535c3ef2471b",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Report date (Y-m-d), defaults to today",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "from_date",
+                        "in": "query",
+                        "description": "Report start date (Y-m-d)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to_date",
+                        "in": "query",
+                        "description": "Report end date (Y-m-d)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "PDF file download",
+                        "content": {
+                            "application/pdf": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/reports/attendance/excel": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Generate attendance report in Excel format",
+                "operationId": "4ea0e7d55d9d5543700988da99a196e2",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Report date (Y-m-d), defaults to today",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "from_date",
+                        "in": "query",
+                        "description": "Report start date (Y-m-d)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to_date",
+                        "in": "query",
+                        "description": "Report end date (Y-m-d)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Excel file download",
+                        "content": {
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthenticated"
@@ -1218,6 +1352,7 @@
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
+                "description": "Enter your Bearer token in the format: Bearer {token}",
                 "bearerFormat": "JWT",
                 "scheme": "bearer"
             }
@@ -1225,16 +1360,20 @@
     },
     "tags": [
         {
-            "name": "Attendance",
-            "description": "Attendance"
-        },
-        {
             "name": "Authentication",
-            "description": "Authentication"
+            "description": "User authentication endpoints"
         },
         {
             "name": "Employees",
-            "description": "Employees"
+            "description": "Employee management endpoints"
+        },
+        {
+            "name": "Attendance",
+            "description": "Attendance tracking endpoints"
+        },
+        {
+            "name": "Reports",
+            "description": "Report generation endpoints"
         }
     ]
 }
