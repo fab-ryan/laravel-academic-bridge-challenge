@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\AttendanceType;
 use App\Http\Requests\Attendance\CheckInRequest;
 use App\Http\Requests\Attendance\CheckOutRequest;
 use App\Models\Attendance;
@@ -14,7 +15,7 @@ use OpenApi\Attributes as OA;
 class AttendanceController extends ApiController
 {
     #[OA\Get(
-        path: '/attendances',
+        path: '/v1/attendances',
         summary: 'List all attendance records',
         security: [['bearerAuth' => []]],
         tags: ['Attendance'],
@@ -120,7 +121,7 @@ class AttendanceController extends ApiController
     }
 
     #[OA\Post(
-        path: '/attendances/check-in',
+        path: '/v1/attendances/check-in',
         summary: 'Record employee arrival (check-in)',
         security: [['bearerAuth' => []]],
         tags: ['Attendance'],
@@ -160,10 +161,11 @@ class AttendanceController extends ApiController
             ->first();
 
         if ($existingAttendance) {
-            return $this->errorResponse('Employee has already checked in today', 400);
+            return $this->errorResponse('Employee has already checked in today', self::HTTP_BAD_REQUEST);
         }
 
         $attendance = DB::transaction(function () use ($employee, $today) {
+            
             return Attendance::create([
                 'employee_id' => $employee->id,
                 'date' => $today,
@@ -174,13 +176,13 @@ class AttendanceController extends ApiController
         $attendance->load('employee');
 
         // Send notification via queue
-        $employee->notify(new AttendanceRecordedNotification($attendance, 'check-in'));
+        $employee->notify(new AttendanceRecordedNotification($attendance, AttendanceType::CHECK_IN->value));
 
-        return $this->successResponse($attendance, 'Check-in recorded successfully', 201);
+        return $this->createdResponse($attendance, 'Check-in recorded successfully');
     }
 
     #[OA\Post(
-        path: '/attendances/check-out',
+        path: '/v1/attendances/check-out',
         summary: 'Record employee departure (check-out)',
         security: [['bearerAuth' => []]],
         tags: ['Attendance'],
@@ -212,9 +214,6 @@ class AttendanceController extends ApiController
     )]
     public function checkOut(CheckOutRequest $request): JsonResponse
     {
-        if ($request->employee_id === null) {
-            return $this->errorResponse('Employee ID is required', 422);
-        }
         $employee = Employee::findOrFail($request->employee_id);
         $today = now()->toDateString();
 
@@ -223,11 +222,11 @@ class AttendanceController extends ApiController
             ->first();
 
         if (!$attendance) {
-            return $this->errorResponse('No check-in record found for today', 400);
+            return $this->errorResponse('No check-in record found for today', self::HTTP_BAD_REQUEST);
         }
 
-        if ($attendance->departure_time) {
-            return $this->errorResponse('Employee has already checked out today', 400);
+        if ($attendance->hasCheckedOut()) {
+            return $this->errorResponse('Employee has already checked out today', self::HTTP_BAD_REQUEST);
         }
 
         $attendance->update([
@@ -237,13 +236,13 @@ class AttendanceController extends ApiController
         $attendance->load('employee');
 
         // Send notification via queue
-        $employee->notify(new AttendanceRecordedNotification($attendance, 'check-out'));
+        $employee->notify(new AttendanceRecordedNotification($attendance, AttendanceType::CHECK_OUT->value));
 
         return $this->successResponse($attendance, 'Check-out recorded successfully');
     }
 
     #[OA\Get(
-        path: '/attendances/{id}',
+        path: '/v1/attendances/{id}',
         summary: 'Get a specific attendance record',
         security: [['bearerAuth' => []]],
         tags: ['Attendance'],
@@ -253,7 +252,7 @@ class AttendanceController extends ApiController
                 in: 'path',
                 description: 'Attendance ID',
                 required: true,
-                schema: new OA\Schema(type: 'integer')
+                schema: new OA\Schema(type: 'string', format: 'uuid', example: '550e8400-e29b-41d4-a716-446655440000')
             ),
         ],
         responses: [
@@ -280,7 +279,7 @@ class AttendanceController extends ApiController
     }
 
     #[OA\Get(
-        path: '/attendances/employee/{employee}/today',
+        path: '/v1/attendances/employee/{employee}/today',
         summary: 'Get today\'s attendance for an employee',
         security: [['bearerAuth' => []]],
         tags: ['Attendance'],
