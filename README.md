@@ -139,7 +139,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 | Service | URL |
 |---------|-----|
 | Application | http://localhost:8000 (Sail) / http://localhost:8000 (artisan serve) |
-| API Documentation | http://localhost/api/documentation |
+| API Documentation | http://localhost:8000/api/documentation |
 | Mailpit | http://localhost:8025 |
 | MySQL | localhost:3306 |
 | Redis | localhost:6379 |
@@ -200,13 +200,13 @@ Uses **Laravel Sanctum** token-based authentication.
 
 ```bash
 # Login
-curl -X POST http://localhost/api/v1/auth/login \
+curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{"email": "admin@example.com", "password": "password"}'
 
 # Authenticated request
-curl -X GET http://localhost/api/v1/employees \
+curl -X GET http://localhost:8000/api/v1/employees \
   -H "Authorization: Bearer <token>" \
   -H "Accept: application/json"
 ```
