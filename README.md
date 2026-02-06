@@ -15,7 +15,7 @@ A RESTful API for managing employee attendance built with Laravel 12, featuring 
 
 ---
 
-## 🚀 Features
+##  Features
 
 | Category | Features |
 |----------|----------|
@@ -28,7 +28,7 @@ A RESTful API for managing employee attendance built with Laravel 12, featuring 
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Component | Technology |
 |-----------|------------|
@@ -45,7 +45,7 @@ A RESTful API for managing employee attendance built with Laravel 12, featuring 
 
 ---
 
-## 📋 Prerequisites
+##  Prerequisites
 
 - Docker Desktop (for Sail setup)
 - Git
@@ -53,7 +53,7 @@ A RESTful API for managing employee attendance built with Laravel 12, featuring 
 
 ---
 
-## 🔧 Installation
+##  Installation
 
 ### Option 1: Laravel Sail (Recommended)
 
@@ -104,7 +104,7 @@ php artisan serve
 
 ---
 
-## ⚙️ Environment Variables
+##  Environment Variables
 
 Key variables to configure in `.env`:
 
@@ -134,7 +134,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 ---
 
-## 🌐 Access Points
+##  Access Points
 
 | Service | URL |
 |---------|-----|
@@ -146,7 +146,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 ---
 
-## 📚 API Reference
+##  API Reference
 
 **Base URL:** `/api/v1`
 
@@ -194,7 +194,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 
 ---
 
-## 🔐 Authentication
+##  Authentication
 
 Uses **Laravel Sanctum** token-based authentication.
 
@@ -215,13 +215,13 @@ curl -X GET http://localhost:8000/api/v1/employees \
 
 ---
 
-## 📊 Default Credentials
+##  Default Credentials
 
 After seeding: `admin@example.com` / `password`
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 # All tests
@@ -236,7 +236,7 @@ php artisan test tests/Feature/AuthenticationTest.php
 
 ---
 
-## 🐳 Sail Commands
+##  Sail Commands
 
 ```bash
 ./vendor/bin/sail up -d          # Start
@@ -249,7 +249,7 @@ php artisan test tests/Feature/AuthenticationTest.php
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 app/
@@ -274,7 +274,7 @@ tests/                  # Feature & Unit tests
 
 ---
 
-## 📝 Code Quality
+##  Code Quality
 
 ```bash
 ./vendor/bin/pint           # Code formatting
@@ -282,7 +282,7 @@ tests/                  # Feature & Unit tests
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -292,7 +292,7 @@ tests/                  # Feature & Unit tests
 
 ---
 
-## 👤 Author
+##  Author
 
 **Fab Ryan** - [GitHub](https://github.com/fab-ryan)
 
