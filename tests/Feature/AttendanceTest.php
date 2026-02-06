@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\User;
 use App\Notifications\AttendanceRecordedNotification;
+use Database\Factories\AttendanceFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\Sanctum;
@@ -19,6 +20,7 @@ class AttendanceTest extends TestCase
     {
         parent::setUp();
         Sanctum::actingAs(User::factory()->create());
+        AttendanceFactory::resetSequence();
     }
 
     public function test_can_list_attendances(): void

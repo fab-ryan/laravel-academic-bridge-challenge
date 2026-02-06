@@ -10,9 +10,17 @@ class AttendanceFactory extends Factory
 {
     protected $model = Attendance::class;
 
+    /**
+     * Track sequence number to ensure unique dates per factory batch.
+     */
+    private static int $sequence = 0;
+
     public function definition(): array
     {
-        $date = fake()->dateTimeBetween('-1 month', 'now');
+        // Use sequence to ensure unique dates when creating multiple records
+        $daysAgo = self::$sequence++;
+        $date = now()->subDays($daysAgo);
+
         $arrivalTime = fake()->dateTimeBetween(
             $date->format('Y-m-d') . ' 07:00:00',
             $date->format('Y-m-d') . ' 09:00:00'
@@ -28,6 +36,14 @@ class AttendanceFactory extends Factory
             'arrival_time' => $arrivalTime,
             'departure_time' => $departureTime,
         ];
+    }
+
+    /**
+     * Reset the sequence counter (useful for testing).
+     */
+    public static function resetSequence(): void
+    {
+        self::$sequence = 0;
     }
 
     public function checkedIn(): static
