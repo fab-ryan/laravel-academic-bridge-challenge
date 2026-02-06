@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Employee CRUD routes
     Route::apiResource('employees', EmployeeController::class);
+
+
+    // Attendance routes
+    Route::get('/attendances', [AttendanceController::class, 'index']);
+    Route::post('/attendances/check-in', [AttendanceController::class, 'checkIn']);
+    Route::post('/attendances/check-out', [AttendanceController::class, 'checkOut']);
+    Route::get('/attendances/employee/{employee}/today', [AttendanceController::class, 'todayAttendance']);
+    Route::get('/attendances/{attendance}', [AttendanceController::class, 'show']);
 });
 Route::any("/", function () {
     return response()->json([
