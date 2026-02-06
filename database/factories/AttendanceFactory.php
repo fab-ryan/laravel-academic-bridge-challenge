@@ -22,12 +22,12 @@ class AttendanceFactory extends Factory
         $date = now()->subDays($daysAgo);
 
         $arrivalTime = fake()->dateTimeBetween(
-            $date->format('Y-m-d') . ' 07:00:00',
-            $date->format('Y-m-d') . ' 09:00:00'
+            $date->format('Y-m-d').' 07:00:00',
+            $date->format('Y-m-d').' 09:00:00'
         );
         $departureTime = fake()->optional(0.8)->dateTimeBetween(
-            $date->format('Y-m-d') . ' 16:00:00',
-            $date->format('Y-m-d') . ' 19:00:00'
+            $date->format('Y-m-d').' 16:00:00',
+            $date->format('Y-m-d').' 19:00:00'
         );
 
         return [
@@ -48,7 +48,7 @@ class AttendanceFactory extends Factory
 
     public function checkedIn(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'departure_time' => null,
         ]);
     }
@@ -57,10 +57,11 @@ class AttendanceFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $date = $attributes['date'] ?? now()->toDateString();
+
             return [
                 'departure_time' => fake()->dateTimeBetween(
-                    $date . ' 16:00:00',
-                    $date . ' 19:00:00'
+                    $date.' 16:00:00',
+                    $date.' 19:00:00'
                 ),
             ];
         });

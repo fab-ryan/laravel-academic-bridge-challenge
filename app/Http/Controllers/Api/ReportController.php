@@ -58,14 +58,14 @@ class ReportController extends ApiController
 
         if ($request->date) {
             $query->whereDate('date', $request->date);
-            $reportTitle = 'Attendance Report for ' . $request->date;
+            $reportTitle = 'Attendance Report for '.$request->date;
         } elseif ($request->from_date && $request->to_date) {
             $query->whereDate('date', '>=', $request->from_date)
                 ->whereDate('date', '<=', $request->to_date);
-            $reportTitle = 'Attendance Report from ' . $request->from_date . ' to ' . $request->to_date;
+            $reportTitle = 'Attendance Report from '.$request->from_date.' to '.$request->to_date;
         } else {
             $query->whereDate('date', now()->toDateString());
-            $reportTitle = 'Attendance Report for ' . now()->toDateString();
+            $reportTitle = 'Attendance Report for '.now()->toDateString();
         }
 
         $attendances = $query->orderBy('date', 'desc')
@@ -78,7 +78,7 @@ class ReportController extends ApiController
             'generatedAt' => now()->format('Y-m-d H:i:s'),
         ]);
 
-        $filename = 'attendance-report-' . now()->format('Y-m-d-His') . '.pdf';
+        $filename = 'attendance-report-'.now()->format('Y-m-d-His').'.pdf';
 
         return $pdf->download($filename);
     }
@@ -129,7 +129,7 @@ class ReportController extends ApiController
         $fromDate = $request->from_date;
         $toDate = $request->to_date;
 
-        $filename = 'attendance-report-' . now()->format('Y-m-d-His') . '.xlsx';
+        $filename = 'attendance-report-'.now()->format('Y-m-d-His').'.xlsx';
 
         return Excel::download(
             new AttendanceExport($date, $fromDate, $toDate),

@@ -165,7 +165,7 @@ class AttendanceController extends ApiController
         }
 
         $attendance = DB::transaction(function () use ($employee, $today) {
-            
+
             return Attendance::create([
                 'employee_id' => $employee->id,
                 'date' => $today,
@@ -221,7 +221,7 @@ class AttendanceController extends ApiController
             ->where('date', $today)
             ->first();
 
-        if (!$attendance) {
+        if (! $attendance) {
             return $this->errorResponse('No check-in record found for today', self::HTTP_BAD_REQUEST);
         }
 
@@ -310,7 +310,7 @@ class AttendanceController extends ApiController
     )]
     public function todayAttendance(Employee $employee): JsonResponse
     {
-        if (!$employee) {
+        if (! $employee) {
             return $this->errorResponse('Employee not found', 404);
         }
 

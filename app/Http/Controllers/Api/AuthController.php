@@ -2,26 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Auth\RegisterRequest;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Models\PasswordResetToken;
-
+use App\Models\User;
 use App\Notifications\ResetPasswordNotification;
-use Illuminate\Support\Str;
-
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use OpenApi\Attributes as OA;
 
 class AuthController extends ApiController
 {
-
     #[OA\Post(
         path: '/v1/auth/register',
         summary: 'Register a new user',
@@ -116,7 +111,7 @@ class AuthController extends ApiController
     {
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return $this->errorResponse('Invalid credentials', self::HTTP_UNAUTHORIZED);
         }
 
@@ -127,8 +122,6 @@ class AuthController extends ApiController
             'token' => $token,
         ], 'Login successful');
     }
-
-
 
     #[OA\Post(
         path: '/v1/auth/logout',
@@ -189,7 +182,7 @@ class AuthController extends ApiController
 
             $user = User::where('email', $request->email)->first();
 
-            if (!$user) {
+            if (! $user) {
                 return $this->errorResponse('User not found', self::HTTP_NOT_FOUND);
             }
 
@@ -205,6 +198,7 @@ class AuthController extends ApiController
             return $this->successResponse(null, 'Password reset link sent to your email');
         } catch (\Exception $e) {
             report($e); // Log the exception
+
             return $this->errorResponse(
                 'Failed to send password reset link. Please try again later.',
                 self::HTTP_INTERNAL_SERVER_ERROR
@@ -246,7 +240,7 @@ class AuthController extends ApiController
     {
         $resetRecord = PasswordResetToken::where('email', $request->email)->first();
 
-        if (!$resetRecord || !Hash::check($request->token, $resetRecord->token)) {
+        if (! $resetRecord || ! Hash::check($request->token, $resetRecord->token)) {
             return $this->errorResponse('Invalid or expired token', self::HTTP_BAD_REQUEST);
         }
 
@@ -254,6 +248,7 @@ class AuthController extends ApiController
         $tokenExpirationMinutes = 60;
         if ($resetRecord->created_at->addMinutes($tokenExpirationMinutes)->isPast()) {
             $resetRecord->delete();
+
             return $this->errorResponse('Token has expired', self::HTTP_BAD_REQUEST);
         }
 

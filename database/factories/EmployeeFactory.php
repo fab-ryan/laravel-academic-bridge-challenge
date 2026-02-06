@@ -14,7 +14,7 @@ class EmployeeFactory extends Factory
         return [
             'names' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'employee_identifier' => 'EMP' . fake()->unique()->numerify('###'),
+            'employee_identifier' => 'EMP'.fake()->unique()->numerify('###'),
             'phone_number' => fake()->phoneNumber(),
         ];
     }

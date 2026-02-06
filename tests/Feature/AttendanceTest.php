@@ -155,7 +155,7 @@ class AttendanceTest extends TestCase
             'date' => now()->subDay()->toDateString(),
         ]);
 
-        $response = $this->getJson('/api/v1/attendances?date=' . now()->toDateString());
+        $response = $this->getJson('/api/v1/attendances?date='.now()->toDateString());
 
         $response->assertStatus(200);
         $this->assertEquals(1, count($response->json('data.data')));
