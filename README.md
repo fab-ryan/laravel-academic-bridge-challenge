@@ -5,6 +5,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/fab-ryan/laravel-academic-bridge-challenge/actions/workflows/tests.yml"><img src="https://github.com/fab-ryan/laravel-academic-bridge-challenge/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
   <a href="#"><img src="https://img.shields.io/badge/Laravel-12.x-FF2D20?style=flat-square&logo=laravel" alt="Laravel Version"></a>
   <a href="#"><img src="https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php" alt="PHP Version"></a>
   <a href="#"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"></a>
